@@ -1,0 +1,29 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ediatr Ativo</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body class="bg-gray-100 text-gray-800">
+    <h1 class="text-4xl font-bold underline text-center mb-6 mt-5">Editar Ativo</h1>
+    <form method="post" class="max-w-3xl mx-auto mt-10 p-6 bg-white rounded shadow-md">
+        {% csrf_token %}
+
+        <label for="{{ form.nome.id_for_label }}" class="block text-base font-bold mb-2 mt-5">Nome:</label>
+        {{ form.nome }}
+
+        <label for="{{ form.valor.id_for_label }}" class="block text-base font-bold mb-2 mt-5">Valor:</label>
+        {{ form.valor }}
+
+        <label for="{{ form.circulante.id_for_label }}" class="block text-base font-bold mb-2 mt-5">Circulante:</label>
+        {{ form.circulante }}
+
+        <button type="submit" class="mt-4 w-full bg-purple-500 text-white font-bold px-4 py-2 rounded hover:bg-purple-700">Atualizar</button>
+        <a href="{% url 'balanco' %}" class="mt-4 inline-block text-center w-full bg-cyan-500 text-white font-bold px-4 py-2 rounded hover:bg-cyan-700">Voltar ao Balanço</a>
+    </form>
+</body>
+</html>

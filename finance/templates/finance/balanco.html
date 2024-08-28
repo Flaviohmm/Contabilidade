@@ -1,0 +1,225 @@
+{% load static %}
+
+{% load custom_filters %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balanço Patrimonial</title>
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        /* Adicione classes para os botões */
+        .button-spacing {
+            margin-left: 4px; /* Ajuste conforme necessário */
+        }
+        @media (max-width: 850px) {
+            .button-spacing {
+                margin-left: 0;
+                margin-top: 15px; /* Adiciona margem em cima se for menor que 850px */
+                display: block; /* Faz com que os botões apareçam em blocos */
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+    <h1 class="text-4xl font-bold underline text-center mb-6 mt-5">Balanço Patrimonial</h1>
+    <div class="overflow-x-auto shadow-md m-5">
+        <table class="min-w-full bg-white border border-gray-300">
+            <thead class="bg-gray-200">
+                <tr>
+                    <th colspan="2" class="text-center">Ativos Circulantes</th>
+                    <th colspan="2" class="text-center">Passivos Circulantes</th>
+                    <th colspan="1" class="text-center">Ações</th>
+                </tr>
+                <tr>
+                    <th>Ativo</th>
+                    <th>Valor (R$)</th>
+                    <th>Passivo</th>
+                    <th>Valor (R$)</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>  
+                {% for ativo in ativos_circulantes %}
+                    <tr>
+                        <td>{{ ativo.nome }}</td>
+                        <td>{{ ativo.valor|format_currency }}</td>
+                        {% if not forloop.last %}
+                            <td>{{ passivos.forloop.counter0.nome }}</td>
+                            <td>{{ passivos.forloop.counter0.valor|format_currency }}</td>
+                        {% else %}
+                            <td></td>
+                            <td></td>
+                        {% endif %}
+                        <td class="text-center space-x-4">
+                            <a
+                                href="{% url 'edit_ativo' ativo.pk %}" 
+                                class="bg-blue-500 text-white font-bold px-4 py-2 text-center rounded hover:bg-blue-700"
+                            >
+                                Editar
+                            </a>
+                            <a
+                                href="{% url 'delete_ativo' ativo.pk %}" 
+                                class="bg-violet-500 text-white font-bold px-4 py-2 text-center rounded hover:bg-violet-700 button-spacing"
+                            >
+                                Deletar
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                
+                {% for passivo in passivos_circulantes %}
+                    {% if passivo != ativos.0 %}
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>{{ passivo.nome }}</td>
+                            <td>{{ passivo.valor|format_currency }}</td>
+                            <td class="text-center space-x-4">
+                                <a 
+                                    href="{% url 'edit_passivo' passivo.pk %}" 
+                                    class="bg-blue-500 text-white font-bold px-4 py-2 text-center rounded hover:bg-blue-700"
+                                >
+                                    Editar
+                                </a>
+
+                                <a 
+                                    href="{% url 'delete_passivo' passivo.pk %}"
+                                    class="bg-violet-500 text-white font-bold px-4 py-2 text-center rounded hover:bg-violet-700 button-spacing"
+                                >
+                                    Deletar
+                                </a>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                <tr>
+                    <td class="font-medium">Total Ativos Circulantes</td>
+                    <td class="font-medium">{{ total_ativos_circulantes|format_currency }}</td>
+                    <td class="font-medium">Total Passivos Circulantes</td>
+                    <td class="font-medium">{{ total_passivos_circulantes|format_currency }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="overflow-x-auto shadow-md m-5">
+        <table class="min-w-full bg-white border border-gray-300">
+            <thead class="bg-gray-200">
+                <tr>
+                    <th colspan="2" class="text-center">Ativos Não Circulantes</th>
+                    <th colspan="2" class="text-center">Passivos Não Circulantes</th>
+                    <th colspan="1" class="text-center">Ações</th>
+                </tr>
+                <tr>
+                    <th>Ativo</th>
+                    <th>Valor (R$)</th>
+                    <th>Passivo</th>
+                    <th>Valor (R$)</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>  
+                {% for ativo in ativos_nao_circulantes %}
+                    <tr>
+                        <td>{{ ativo.nome }}</td>
+                        <td>{{ ativo.valor|format_currency }}</td>
+                        {% if not forloop.last %}
+                            <td>{{ passivos.forloop.counter0.nome }}</td>
+                            <td>{{ passivos.forloop.counter0.valor|format_currency }}</td>
+                        {% else %}
+                            <td></td>
+                            <td></td>
+                        {% endif %}
+                        <td class="text-center space-x-4">
+                            <a 
+                                href="{% url 'edit_ativo' ativo.pk %}"
+                                class="bg-blue-500 text-white font-bold px-4 py-2 text-center rounded hover:bg-blue-700"
+                            >
+                                Editar
+                            </a>
+
+                            <a 
+                                href="{% url 'delete_ativo' ativo.pk %}"
+                                class="bg-violet-500 text-white font-bold px-4 py-2 text-center rounded hover:bg-violet-700 button-spacing"
+                            >
+                                Deletar
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                
+                {% for passivo in passivos_nao_circulantes %}
+                    {% if passivo != ativos.0 %}
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>{{ passivo.nome }}</td>
+                            <td>{{ passivo.valor|format_currency }}</td>
+                            <td class="text-center space-x-4">
+                                <a 
+                                    href="{% url 'edit_passivo' passivo.pk %}"
+                                    class="bg-blue-500 text-white font-bold px-4 py-2 text-center rounded hover:bg-blue-700"
+                                >
+                                    Editar
+                                </a>
+
+                                <a 
+                                    href="{% url 'delete_passivo' passivo.pk %}"
+                                    class="bg-violet-500 text-white font-bold px-4 py-2 text-center rounded hover:bg-violet-700 button-spacing"
+                                >
+                                    Deletar
+                                </a>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                <tr>
+                    <td class="font-medium">Total Ativos Não Circulantes</td>
+                    <td class="font-medium">{{ total_ativos_nao_circulantes|format_currency }}</td>
+                    <td class="font-medium">Total Passivos Não Circulantes</td>
+                    <td class="font-medium">{{ total_passivos_nao_circulantes|format_currency }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="overflow-x-auto shadow-md m-5 mb-6">
+        <table class="min-w-full bg-white border border-gray-300 mt-4">
+            <tbody>
+                <tr>
+                    <td><strong>Total Ativo</strong></td>
+                    <td><strong>{{ total_ativos|format_currency }}</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>Total Passivo</strong></td>
+                    <td><strong>{{ total_passivos|format_currency }}</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>Patrimônio Líquido</strong></td>
+                    <td><strong>{{ patrimonio_liquido|format_currency }}</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="space-x-4 mx-5">
+        <a href="{% url 'add_ativo' %}" class="bg-violet-500 text-white font-bold px-4 py-2 rounded hover:bg-violet-700">Adicionar Ativo</a>
+        <a href="{% url 'add_passivo' %}" class="bg-sky-500 text-white font-bold px-4 py-2 rounded hover:bg-sky-700">Adicionar Passivo</a>
+    </div>
+
+    <br>
+
+</body>
+</html>
