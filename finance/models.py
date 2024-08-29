@@ -28,3 +28,14 @@ class BalancoPatrimonial(models.Model):
     
     def patrimonio_liquido(self):
         return self.total_ativos() - self.total_passivos()
+    
+class DemonstracaoResultado(models.Model):
+    descricao = models.CharField(max_length=255)
+    valor = models.DecimalField(max_digits=15, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.descricao}: R$ {self.valor}"
+    
+    class Meta:
+        verbose_name = "Demonstração de Resultados"
+        verbose_name_plural = "Demonstrações de Resultados"

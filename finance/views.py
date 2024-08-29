@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Ativo, Passivo, BalancoPatrimonial
-from .forms import AtivoForm, PassivoForm
+from .models import Ativo, Passivo, DemonstracaoResultado
+from .forms import AtivoForm, PassivoForm, DemostracaoResultadoForm
 
 def balanco_view(request):
     # Supondo que você tenha algum jeito de classificar ou identificar circulantes e não circulantes
@@ -88,3 +88,50 @@ def delete_passivo(request, id):
     passivo = get_object_or_404(Passivo, id=id)
     passivo.delete()
     return redirect('balanco') # Altere para a URL apropriada
+
+def add_demonstracao_resultado(request):
+    if request.method == "POST":
+        form = DemostracaoResultadoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('demonstracao_resultados') # Redireciona para a tabela após adição
+    else:
+        form = DemostracaoResultadoForm()
+
+    return render(request, 'finance/add_demonstracao_resultado.html', {'form': form})
+
+def demonstracao_resultados(request):
+    resultados = DemonstracaoResultado.objects.all()
+
+    # Cálculo dos valores
+    receita_bruta = resultados.filter(descricao='Receita Bruta').first().valor if resultados.filter(descricao='Receita Bruta').exists() else 0
+    deducoes_impostos = resultados.filter(descricao='(-) Deduções e Impostos').first().valor if resultados.filter(descricao='(-) Deduções e Impostos').exists() else 0
+    receita_liquida = receita_bruta - deducoes_impostos
+    custo_materiais_vendidos = resultados.filter(descricao='(-) Custo das Mercadorias Vendidas').first().valor if resultados.filter(descricao='(-) Custo das Mercadorias Vendidas').exists() else 0
+    lucro_bruto = receita_liquida - custo_materiais_vendidos
+
+    despesas_operacionais = resultados.filter(descricao='(-) Despesas Operacionais').first().valor if resultados.filter(descricao='(-) Despesas Operacionais').exists() else 0
+    lucro_operacional = lucro_bruto - despesas_operacionais
+
+    outras_receitas = resultados.filter(descricao='(+) Outras Receitas').first().valor if resultados.filter(descricao='(+) Outras Receitas').exists() else 0
+    outras_despesas = resultados.filter(descricao='(-) Outras Despesas').first().valor if resultados.filter(descricao='(-) Outras Despesas').exists() else 0
+    lucro_antes_impostos = lucro_operacional + outras_receitas - outras_despesas
+
+    imposto_renda = resultados.filter(descricao='(-) Imposto de Renda').first().valor if resultados.filter(descricao='(-) Imposto de Renda').exists() else 0
+    lucro_liquido = lucro_antes_impostos - imposto_renda
+
+    context = {
+        'resultados': resultados,
+        'receita_liquida': receita_liquida,
+        'custo_materiais_vendidos': custo_materiais_vendidos,
+        'lucro_bruto': lucro_bruto,
+        'despesas_operacionais': despesas_operacionais,
+        'lucro_operacional': lucro_operacional,
+        'outras_receitas': outras_receitas,
+        'outras_despesas': outras_despesas,
+        'lucro_antes_impostos': lucro_antes_impostos,
+        'imposto_renda': imposto_renda,
+        'lucro_liquido': lucro_liquido,
+    }
+
+    return render(request, 'finance/demonstracao_resultados.html', context)

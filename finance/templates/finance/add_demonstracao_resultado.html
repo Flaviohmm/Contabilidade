@@ -1,0 +1,31 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Demonstração de Resultados</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <h1 class="text-4xl font-bold text-center mb-4">Adicionar Demonstração de Resultados</h1>
+    <form method="post" class="max-w-3xl mx-auto mt-10 p-6 bg-white rounded shadow-md">
+        {% csrf_token %}
+
+        <label for="{{ form.descricao.id_for_label }}" class="block text-base font-bold mb-2 mt-5">Descrição:</label>
+        {{ form.descricao }}
+
+        <label for="{{ form.valor.id_for_label }}" class="block text-base font-bold mb-2 mt-5">Valor:</label>
+        {{ form.valor }}
+
+        <br>
+
+        <button type="submit" class="mt-4 bg-blue-500 text-white font-bold px-4 py-2 rounded hover:bg-blue-700">Adicionar</button>
+        <a href="{% url 'demonstracao_resultados' %}" class="mt-4 bg-violet-500 text-white font-bold px-4 py-2 rounded hover:bg-violet-700 m-5">
+            Demonstração Resultados
+        </a>
+    </form>
+    <br>
+</body>
+</html>

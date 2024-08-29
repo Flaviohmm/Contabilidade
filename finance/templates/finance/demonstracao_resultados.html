@@ -1,0 +1,87 @@
+{% load static %} 
+
+{% load custom_filters %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demonstração de Resultados</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <h1 class="text-4xl font-bold text-center mb-4">Demonstração de Resultados</h1>
+    <div class="overflow-x-auto shadow-md m-5">
+        <table class="min-w-full bg-white border border-gray-300">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th>Descrição</th>
+                    <th>Valor (R$)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for resultado in resultados %}
+                    {% if resultado.descricao == "Receita Bruta" %}         
+                        <tr class="font-medium">
+                            <td>{{ resultado.descricao }}</td>
+                            <td>{{ resultado.valor|format_currency }}</td>
+                        </tr>
+                    {% endif %}
+                    
+                    {% if resultado.descricao == "(-) Deduções e Impostos" %}
+                        <tr>
+                            <td>{{ resultado.descricao }}</td>
+                            <td>{{ resultado.valor|format_currency }}</td>
+                        </tr>     
+                    {% endif %}         
+                {% endfor %}
+                <tr class="font-medium">
+                    <td>Receita Líquida</td>
+                    <td>{{ receita_liquida|format_currency }}</td>
+                </tr>
+                <tr>
+                    <td>(-) Custo das Mercadorias Vendidas</td>
+                    <td>{{ custo_materiais_vendidos|format_currency }}</td>
+                </tr>
+                <tr class="font-medium">
+                    <td>Lucro Bruto</td>
+                    <td>{{ lucro_bruto|format_currency }}</td>
+                </tr>
+                <tr>
+                    <td>(-) Despesas Operacionais</td>
+                    <td>{{ despesas_operacionais|format_currency }}</td>
+                </tr>
+                <tr class="font-medium">
+                    <td>Lucro Operacional</td>
+                    <td>{{ lucro_operacional|format_currency }}</td>
+                </tr>
+                <tr>
+                    <td>(+) Outras Receitas</td>
+                    <td>{{ outras_receitas|format_currency }}</td>
+                </tr>
+                <tr>
+                    <td>(-) Outras Despesas</td>
+                    <td>{{ outras_despesas|format_currency }}</td>
+                </tr>
+                <tr class="font-medium">
+                    <td>Lucro Antes do Imposto</td>
+                    <td>{{ lucro_antes_impostos|format_currency }}</td>
+                </tr>
+                <tr>
+                    <td>(-) Imposto de Renda</td>
+                    <td>{{ imposto_renda|format_currency }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Lucro Líquido:</strong></td>
+                    <td><strong>{{ lucro_liquido|format_currency }}</strong></td>
+                </tr>    
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <a href="{% url 'add_demonstracao_resultado' %}" class="bg-blue-500 text-white font-bold px-4 py-2 rounded hover:bg-blue-500 m-5">
+        Adicionar Demonstração
+    </a>
+</body>
+</html>

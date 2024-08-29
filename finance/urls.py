@@ -9,4 +9,6 @@ urlpatterns = [
     path('delete_ativo/<int:id>/', views.delete_ativo, name='delete_ativo'),
     path('edit_passivo/<int:id>/', views.edit_passivo, name='edit_passivo'),
     path('delete_passivo/<int:id>/', views.delete_passivo, name='delete_passivo'),
+    path('demonstracao-resultados/', views.demonstracao_resultados, name='demonstracao_resultados'),
+    path('add-demonstracao-resultado/', views.add_demonstracao_resultado, name='add_demonstracao_resultado'),
 ]

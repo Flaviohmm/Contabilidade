@@ -1,5 +1,5 @@
 from django import forms
-from .models import Ativo, Passivo
+from .models import Ativo, Passivo, DemonstracaoResultado
 
 class AtivoForm(forms.ModelForm):
     class Meta:
@@ -33,6 +33,21 @@ class PassivoForm(forms.ModelForm):
                 'placeholder': 'Valor do Passivo',
             }),
             'circulante': forms.CheckboxInput(attrs={
-                'class': 'form-checkbox h-5 w-5 text-indigo-600'
+                'class': 'form-checkbox h-5 w-5 text-indigo-600',
             })
+        }
+
+class DemostracaoResultadoForm(forms.ModelForm):
+    class Meta:
+        model = DemonstracaoResultado
+        fields = ['descricao', 'valor']
+        widgets = {
+            'descricao': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-2 border border-gray-300 rounded',
+                'placeholder': 'Digite o nome da descrição',
+            }),
+            'valor': forms.NumberInput(attrs={
+                'class': 'w-full px-4 py-2 border border-gray-300 rounded',
+                'placeholder': 'Digite o valor da descrição',
+            }),
         }
