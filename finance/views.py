@@ -100,6 +100,24 @@ def add_demonstracao_resultado(request):
 
     return render(request, 'finance/add_demonstracao_resultado.html', {'form': form})
 
+def edit_demonstracao_resultado(request, pk):
+    resultado = get_object_or_404(DemonstracaoResultado, pk=pk)
+
+    if request.method == "POST":
+        form = DemostracaoResultadoForm(request.POST, instance=resultado)
+        if form.is_valid():
+            form.save()
+            return redirect('demonstracao_resultados') # Redireciona para a tabela após edição
+    else:
+        form = DemostracaoResultadoForm(instance=resultado)
+
+    return render(request, 'finance/edit_demonstracao_resultado.html', {'form': form})
+
+def delete_demonstracao_resultado(request, pk):
+    resultado = get_object_or_404(DemonstracaoResultado, pk=pk)
+    resultado.delete()
+    return redirect('demonstracao_resultados')
+
 def demonstracao_resultados(request):
     resultados = DemonstracaoResultado.objects.all()
 

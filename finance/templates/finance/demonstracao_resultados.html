@@ -9,6 +9,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Demonstração de Resultados</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        /* Adicione classes para os botões */
+        .button-spacing {
+            margin-left: 4px; /* Ajuste conforme necessário */
+        }
+        @media (max-width: 850px) {
+            .button-spacing {
+                margin-left: 0;
+                margin-top: 15px; /* Adiciona margem em cima se for menor que 850px */
+                display: block; /* Faz com que os botões apareçam em blocos */
+            }
+        }
+    </style>
 </head>
 <body>
     <h1 class="text-4xl font-bold text-center mb-4">Demonstração de Resultados</h1>
@@ -18,6 +40,7 @@
                 <tr>
                     <th>Descrição</th>
                     <th>Valor (R$)</th>
+                    <th>Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -26,6 +49,20 @@
                         <tr class="font-medium">
                             <td>{{ resultado.descricao }}</td>
                             <td>{{ resultado.valor|format_currency }}</td>
+                            <td class="text-center space-x-4">
+                                <a
+                                    href="{% url 'edit_demonstracao_resultado' resultado.pk %}" 
+                                    class="bg-blue-500 text-white font-bold px-4 py-2 text-center rounded hover:bg-blue-700"
+                                >
+                                    Editar
+                                </a>
+                                <a
+                                    href="{% url 'delete_demonstracao_resultado' resultado.pk %}" 
+                                    class="bg-violet-500 text-white font-bold px-4 py-2 text-center rounded hover:bg-violet-700 button-spacing"
+                                >
+                                    Deletar
+                                </a>
+                            </td>
                         </tr>
                     {% endif %}
                     
@@ -33,48 +70,185 @@
                         <tr>
                             <td>{{ resultado.descricao }}</td>
                             <td>{{ resultado.valor|format_currency }}</td>
+                            <td class="text-center space-x-4">
+                                <a
+                                    href="{% url 'edit_demonstracao_resultado' resultado.pk %}" 
+                                    class="bg-blue-500 text-white font-bold px-4 py-2 text-center rounded hover:bg-blue-700"
+                                >
+                                    Editar
+                                </a>
+                                <a
+                                    href="{% url 'delete_demonstracao_resultado' resultado.pk %}" 
+                                    class="bg-violet-500 text-white font-bold px-4 py-2 text-center rounded hover:bg-violet-700 button-spacing"
+                                >
+                                    Deletar
+                                </a>
+                            </td>
                         </tr>     
-                    {% endif %}         
+                    {% endif %} 
+                    
+                    {% if resultado.descricao == "Receita Líquida" %}    
+                        <tr class="font-medium">
+                            <td>Receita Líquida</td>
+                            <td>{{ receita_liquida|format_currency }}</td>
+                            <td class="text-center space-x-4">
+                                <a
+                                    href="{% url 'edit_demonstracao_resultado' resultado.pk %}" 
+                                    class="bg-blue-500 text-white font-bold px-4 py-2 text-center rounded hover:bg-blue-700"
+                                >
+                                    Editar
+                                </a>
+                                <a
+                                    href="{% url 'delete_demonstracao_resultado' resultado.pk %}" 
+                                    class="bg-violet-500 text-white font-bold px-4 py-2 text-center rounded hover:bg-violet-700 button-spacing"
+                                >
+                                    Deletar
+                                </a>                           
+                            </td>
+                        </tr>
+                    {% endif %}
+                        
+                    {% if resultado.descricao == "(-) Custo das Mercadorias Vendidas" %}   
+                        <tr>
+                            <td>(-) Custo das Mercadorias Vendidas</td>
+                            <td>{{ custo_materiais_vendidos|format_currency }}</td>
+                            <td class="text-center space-x-4">
+                                <a
+                                    href="{% url 'edit_demonstracao_resultado' resultado.pk %}" 
+                                    class="bg-blue-500 text-white font-bold px-4 py-2 text-center rounded hover:bg-blue-700"
+                                >
+                                    Editar
+                                </a>
+                                <a
+                                    href="{% url 'delete_demonstracao_resultado' resultado.pk %}" 
+                                    class="bg-violet-500 text-white font-bold px-4 py-2 text-center rounded hover:bg-violet-700 button-spacing"
+                                >
+                                    Deletar
+                                </a>
+                            </td>
+                        </tr>
+                    {% endif %}
+
                 {% endfor %}
-                <tr class="font-medium">
-                    <td>Receita Líquida</td>
-                    <td>{{ receita_liquida|format_currency }}</td>
-                </tr>
-                <tr>
-                    <td>(-) Custo das Mercadorias Vendidas</td>
-                    <td>{{ custo_materiais_vendidos|format_currency }}</td>
-                </tr>
+
                 <tr class="font-medium">
                     <td>Lucro Bruto</td>
                     <td>{{ lucro_bruto|format_currency }}</td>
+                    <td class="text-center space-x-4">
+                        
+                    </td>
                 </tr>
-                <tr>
-                    <td>(-) Despesas Operacionais</td>
-                    <td>{{ despesas_operacionais|format_currency }}</td>
-                </tr>
+
+                {% for resultado in resultados %}
+                    {% if resultado.descricao == "(-) Despesas Operacionais" %}
+                        <tr>
+                            <td>(-) Despesas Operacionais</td>
+                            <td>{{ despesas_operacionais|format_currency }}</td>
+                            <td class="text-center space-x-4">
+                                <a
+                                    href="{% url 'edit_demonstracao_resultado' resultado.pk %}" 
+                                    class="bg-blue-500 text-white font-bold px-4 py-2 text-center rounded hover:bg-blue-700"
+                                >
+                                    Editar
+                                </a>
+                                <a
+                                    href="{% url 'delete_demonstracao_resultado' resultado.pk %}" 
+                                    class="bg-violet-500 text-white font-bold px-4 py-2 text-center rounded hover:bg-violet-700 button-spacing"
+                                >
+                                    Deletar
+                                </a>
+                            </td>
+                        </tr>
+                    {% endif %} 
+                {% endfor %}
+
                 <tr class="font-medium">
                     <td>Lucro Operacional</td>
                     <td>{{ lucro_operacional|format_currency }}</td>
+                    <td class="text-center space-x-4">
+                        
+                    </td>
                 </tr>
-                <tr>
-                    <td>(+) Outras Receitas</td>
-                    <td>{{ outras_receitas|format_currency }}</td>
-                </tr>
-                <tr>
-                    <td>(-) Outras Despesas</td>
-                    <td>{{ outras_despesas|format_currency }}</td>
-                </tr>
+                
+                {% for resultado in resultados %}
+                    {% if resultado.descricao == "(+) Outras Receitas" %}    
+                        <tr>
+                            <td>(+) Outras Receitas</td>
+                            <td>{{ outras_receitas|format_currency }}</td>
+                            <td class="text-center space-x-4">
+                                <a
+                                    href="{% url 'edit_demonstracao_resultado' resultado.pk %}" 
+                                    class="bg-blue-500 text-white font-bold px-4 py-2 text-center rounded hover:bg-blue-700"
+                                >
+                                    Editar
+                                </a>
+                                <a
+                                    href="{% url 'delete_demonstracao_resultado' resultado.pk %}" 
+                                    class="bg-violet-500 text-white font-bold px-4 py-2 text-center rounded hover:bg-violet-700 button-spacing"
+                                >
+                                    Deletar
+                                </a>
+                            </td>
+                        </tr>
+                    {% endif %}
+                        
+                    {% if resultado.descricao == "(-) Outras Despesas" %}
+                        <tr>
+                            <td>(-) Outras Despesas</td>
+                            <td>{{ outras_despesas|format_currency }}</td>
+                            <td class="text-center space-x-4">
+                                <a
+                                    href="{% url 'edit_demonstracao_resultado' resultado.pk %}" 
+                                    class="bg-blue-500 text-white font-bold px-4 py-2 text-center rounded hover:bg-blue-700"
+                                >
+                                    Editar
+                                </a>
+                                <a
+                                    href="{% url 'delete_demonstracao_resultado' resultado.pk %}" 
+                                    class="bg-violet-500 text-white font-bold px-4 py-2 text-center rounded hover:bg-violet-700 button-spacing"
+                                >
+                                    Deletar
+                                </a>
+                            </td>
+                        </tr>    
+                    {% endif %}  
+                {% endfor %}
+
                 <tr class="font-medium">
                     <td>Lucro Antes do Imposto</td>
                     <td>{{ lucro_antes_impostos|format_currency }}</td>
+                    <td class="text-center space-x-4">
+                        
+                    </td>
                 </tr>
-                <tr>
-                    <td>(-) Imposto de Renda</td>
-                    <td>{{ imposto_renda|format_currency }}</td>
-                </tr>
+
+                {% for resultado in resultados %}
+                    {% if resultado.descricao == "(-) Imposto de Renda" %}
+                        <tr>
+                            <td>(-) Imposto de Renda</td>
+                            <td>{{ imposto_renda|format_currency }}</td>
+                            <td class="text-center space-x-4">
+                                <a
+                                    href="{% url 'edit_demonstracao_resultado' resultado.pk %}" 
+                                    class="bg-blue-500 text-white font-bold px-4 py-2 text-center rounded hover:bg-blue-700"
+                                >
+                                    Editar
+                                </a>
+                                <a
+                                    href="{% url 'delete_demonstracao_resultado' resultado.pk %}" 
+                                    class="bg-violet-500 text-white font-bold px-4 py-2 text-center rounded hover:bg-violet-700 button-spacing"
+                                >
+                                    Deletar
+                                </a>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                
                 <tr>
                     <td><strong>Lucro Líquido:</strong></td>
                     <td><strong>{{ lucro_liquido|format_currency }}</strong></td>
+                    <td></td>
                 </tr>    
             </tbody>
         </table>

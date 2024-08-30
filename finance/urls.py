@@ -11,4 +11,6 @@ urlpatterns = [
     path('delete_passivo/<int:id>/', views.delete_passivo, name='delete_passivo'),
     path('demonstracao-resultados/', views.demonstracao_resultados, name='demonstracao_resultados'),
     path('add-demonstracao-resultado/', views.add_demonstracao_resultado, name='add_demonstracao_resultado'),
+    path('edit_demonstracao_resultado/<int:pk>/', views.edit_demonstracao_resultado, name='edit_demonstracao_resultado'),
+    path('delete_demonstracao_resultado/<int:pk>/', views.delete_demonstracao_resultado, name='delete_demonstracao_resultado'),
 ]
